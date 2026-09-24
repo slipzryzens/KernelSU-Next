@@ -491,19 +491,26 @@ static inline void kfree_byref(void *buf) { kfree(*(void **)buf); }
  *
  */
 #if defined(CONFIG_KSU_NOPRINTK) && !defined(CONFIG_KSU_DEBUG)
-#ifndef no_printk
-#define no_printk(...) do { } while (0)
-#endif
-#define pr_emerg(fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
-#define pr_alert(fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
-#define pr_crit(fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
-#define pr_err(fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
-#define pr_warn(fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
-#define pr_notice(fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
-#define pr_info(fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
-#define pr_debug(fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
-#define pr_devel(fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
-#define printk(fmt, ...)	no_printk(fmt, ##__VA_ARGS__)
+#undef pr_emerg
+#define pr_emerg(fmt, ...)	do { } while (0)
+#undef pr_alert
+#define pr_alert(fmt, ...)	do { } while (0)
+#undef pr_crit
+#define pr_crit(fmt, ...)	do { } while (0)
+#undef pr_err
+#define pr_err(fmt, ...)	do { } while (0)
+#undef pr_warn
+#define pr_warn(fmt, ...)	do { } while (0)
+#undef pr_notice
+#define pr_notice(fmt, ...)	do { } while (0)
+#undef pr_info
+#define pr_info(fmt, ...)	do { } while (0)
+#undef pr_debug
+#define pr_debug(fmt, ...)	do { } while (0)
+#undef pr_devel
+#define pr_devel(fmt, ...)	do { } while (0)
+#undef printk
+#define printk(fmt, ...)	do { } while (0)
 #endif // CONFIG_KSU_NOPRINTK && !CONFIG_KSU_DEBUG
 
 /**
