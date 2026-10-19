@@ -113,10 +113,10 @@ static __nocfi int ksu_setprocattr_old(struct task_struct *p, char *name, void *
 #endif
 
 // now choose what we have
-static typeof(security_setprocattr) *ksu_setprocattr __read_mostly = nullptr;
-static inline void ksu_do_overload_setprocattr(void)
-{
-	ksu_setprocattr = OVERLOAD_SETPROCATTR(security_setprocattr);
+static typeof(security_setprocattr) *ksu_setprocattr __read_mostly;
+
+static typeof(security_setprocattr) *get_ksu_setprocattr(void) {
+    return OVERLOAD_SETPROCATTR(security_setprocattr);
 }
 #pragma GCC diagnostic pop
 #undef SETPROCATTR_TYPE_new2
@@ -309,8 +309,8 @@ static __init void ksu_lsm_hook_init(void)
 	LSM_HACK_INIT(task_fix_setuid, ksu_task_fix_setuid);
 	LSM_HACK_INIT(inode_rename, ksu_inode_rename);
 
-	ksu_do_overload_setprocattr();
-	LSM_HACK_INIT(setprocattr, ksu_setprocattr);
+    ksu_setprocattr = get_ksu_setprocattr();
+    LSM_HACK_INIT(setprocattr, ksu_setprocattr);
 
 #ifdef CONFIG_KSU_FEATURE_SULOG
 	LSM_HACK_INIT(bprm_committing_creds, ksu_bprm_committing_creds);
@@ -318,14 +318,13 @@ static __init void ksu_lsm_hook_init(void)
 
 #if !defined(CONFIG_KSU_TAMPER_SYSCALL_TABLE) && !defined(CONFIG_KSU_HACK_ARM64_BRANCH_LINK)
 	LSM_HACK_INIT(file_permission, ksu_file_permission);
-	kthread_run(ksu_restore_file_permission, NULL, "kthread");
+    kthread_run(ksu_restore_file_permission, NULL, "kthread");
 #endif
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 14, 0)
 	LSM_HACK_INIT(bprm_set_creds, ksu_bprm_set_creds);
-	kthread_run(ksu_restore_bprm_set_creds, NULL, "kthread");
+    kthread_run(ksu_restore_bprm_set_creds, NULL, "kthread");
 #endif
-
 }
 
 static void __init ksu_core_init(void)
