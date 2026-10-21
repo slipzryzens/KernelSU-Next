@@ -34,12 +34,28 @@ static void crown_manager(const char *apk, struct list_head *uid_data)
 	struct list_head *list = (struct list_head *)uid_data;
 	struct uid_data *np;
 
-	list_for_each_entry (np, list, list) {
-		if (test_extra_pkgs(np->package) || strncmp(np->package, KSU_PACKAGE_NAME, KSU_MAX_PACKAGE_NAME) == 0) {
-			pr_info("Crowning manager: uid=%d\n", np->uid);
+	list_for_each_entry(np, list, list) {
+		if (strncmp(np->package, KSU_PACKAGE_NAME, KSU_MAX_PACKAGE_NAME) == 0) {
+			pr_info("Crowning manager (Official): uid=%d\n", np->uid);
 			ksu_set_manager_appid(np->uid);
+			ksu_set_manager_type(KSU_MANAGER_UNKNOWN);
 			break;
-		}
+		} else if (is_ksun_apk(np->package) || is_spoof1_apk(np->package)) {
+			pr_info("Crowning manager (KSUN / Spoof): uid=%d\n", np->uid);
+			ksu_set_manager_appid(np->uid);
+			ksu_set_manager_type(KSU_MANAGER_KSUN); // KSUN
+			break;
+		} else if (is_bksu_apk(np->package) || is_spoof2_apk(np->package)) {
+			pr_info("Crowning manager (BakaSU / Spoof): uid=%d\n", np->uid);
+			ksu_set_manager_appid(np->uid);
+			ksu_set_manager_type(KSU_MANAGER_BKSU); // BakaSU
+			break;
+		} else if (is_fin_asu_apk(np->package)) {
+			pr_info("Crowning manager (FinaSU): uid=%d\n", np->uid);
+            ksu_set_manager_appid(np->uid);
+            ksu_set_manager_type(KSU_MANAGER_XXSU); // FinaSU/XXSU
+            break;
+        }
 	}
 }
 

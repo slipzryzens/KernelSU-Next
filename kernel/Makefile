@@ -13,7 +13,32 @@ $(info -- KDIR: $(KDIR))
 $(info -- MDIR: $(MDIR))
 
 # compliant to last upstream kernel change as of db6263d
-CFLAGS_ksu.o += -DKSU_VERSION=32707
+KSU_VERSION := 32707
+KSU_VERSION_TAG := v3.3.1
+KSU_KSUN_TAG := v3.4.2
+KSU_BKSU_TAG := v4.2.0
+FINASU_TAG := v1.3.2
+KSU_KSUN_VERSION := $(shell echo $$(($(KSU_VERSION) + 738)))
+KSU_BKSU_VERSION := $(shell echo $$(($(KSU_VERSION) + 2545)))
+FINASU_VERSION := $(shell echo $$(($(KSU_VERSION) + 383)))
+
+ccflags-y += -DKSU_VERSION=$(KSU_VERSION) \
+             -DKSU_VERSION_TAG=\"$(KSU_VERSION_TAG)\" \
+             -DKSU_KSUN_VERSION=$(KSU_KSUN_VERSION) \
+             -DKSU_KSUN_TAG=\"$(KSU_KSUN_TAG)\" \
+             -DKSU_BKSU_VERSION=$(KSU_BKSU_VERSION) \
+             -DKSU_BKSU_TAG=\"$(KSU_BKSU_TAG)\" \
+             -DFINASU_VERSION=$(FINASU_VERSION) \
+             -DFINASU_TAG=\"$(FINASU_TAG)\"
+
+$(info -- KernelSU tag: $(KSU_VERSION_TAG))
+$(info -- KernelSU version: $(KSU_VERSION))
+$(info -- KernelSU-Next tag: $(KSU_KSUN_TAG))
+$(info -- KernelSU-Next version: $(KSU_KSUN_VERSION))
+$(info -- BakaSU tag: $(KSU_BKSU_TAG))
+$(info -- BakaSU version: $(KSU_BKSU_VERSION))
+$(info -- FinaSU tag: $(FINASU_TAG))
+$(info -- FinaSU version: $(FINASU_VERSION))
 
 KSU_PACKAGE_NAME := me.weishu.kernelsu
 KSU_EXPECTED_SIZE := 0x033b
