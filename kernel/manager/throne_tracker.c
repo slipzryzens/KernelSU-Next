@@ -12,9 +12,14 @@ static char cached_manager_apk_path[DATA_PATH_LEN];
 	static_assert(DATA_PATH_LEN > sizeof(name));	\
 	!strncmp(tgt, name, sizeof(name));		\
 })
-#define is_kowsu_apk(tgt) extra_manager_apk(tgt, "com.kowx712.supermanager")
-#define is_midorisu_apk(tgt) extra_manager_apk(tgt, "com.midori.supermanager")
-#define test_extra_pkgs(tgt) (is_kowsu_apk(tgt) || is_midorisu_apk(tgt))
+#define is_ksun_apk(tgt) extra_manager_apk(tgt, "com.rifsxd.ksunext")
+#define is_bksu_apk(tgt) extra_manager_apk(tgt, "com.resukisu.resukisu")
+#define is_fin_asu_apk(tgt) extra_manager_apk(tgt, "me.yuki.fina")
+#define is_spoof1_apk(tgt) extra_manager_apk(tgt, "weonse.bxmfmy.qeomje")
+#define is_spoof2_apk(tgt) extra_manager_apk(tgt, "lgkqzt.pkdprs.ohpmjq")
+#define test_extra_pkgs(tgt) \
+        (is_ksun_apk(tgt) || is_bksu_apk(tgt) || is_fin_asu_apk(tgt) || is_spoof1_apk(tgt) || \
+        is_spoof2_apk(tgt))
 
 #define SYSTEM_PACKAGES_LIST_PATH "/data/system/packages.list"
 
